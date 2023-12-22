@@ -2,17 +2,23 @@ import { Outlet } from 'react-router-dom'
 import { NavBar } from './NavBar'
 
 
-const HomePage = () => {
+const HomePage = ({ error, setNextPage, isLoading }) => {
     
     return (
         <>
-        <NavBar/>
-        <main>
-            {/* <div>
-                Home stuff
-            </div> */}
-            <Outlet/>
-        </main>
+        <NavBar setNextPage={setNextPage}/>
+        {
+            error && <p>{error}</p>
+        }
+        {
+            isLoading && <p>Estamos cargando...</p>
+        }
+        {
+            !error && !isLoading &&
+                <main>
+                    <Outlet/>
+                </main>
+        }
         </>
       )
 }

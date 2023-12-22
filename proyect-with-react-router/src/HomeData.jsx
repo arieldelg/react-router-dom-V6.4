@@ -1,20 +1,37 @@
+import { MovieCard } from "./MovieCard"
+import { CategoryCard } from "./CategoryCard"
+import { NavLink } from "react-router-dom"
 
-const  HomeData = () => {
+const  HomeData = ({ dayTrendingMovie, genreList }) => {
+
     return (
-        <main>
+        <div className="w-screen">
             <div>
-                <h1>Tendencias</h1>
                 <div>
-                    Aqui van las peliculas
+                    <h1>Tendencias</h1>
+                    <NavLink to={'tendencias'}>
+                        <button>Ver Mas</button>
+                    </NavLink>
+                </div>
+                <div className="w-full flex">
+                    {
+                        dayTrendingMovie.map(element => {
+                            return <MovieCard data={element} key={element.id}/>
+                        })
+                    }
                 </div>
             </div>
             <div>
                 <h1>Generos</h1>
-                <u>
-                    <li>Aqui va una lista de Generos</li>
-                </u>
+                <ul>
+                    {
+                        genreList.map(element => {
+                            return <CategoryCard data={element} key={element.id}/>
+                        })
+                    }
+                </ul>
             </div>
-        </main>
+        </div>
     )
 }
 

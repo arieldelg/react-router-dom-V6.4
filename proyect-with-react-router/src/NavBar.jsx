@@ -1,12 +1,12 @@
 import { FilmIcon } from '@heroicons/react/24/solid'
 import { NavLink } from 'react-router-dom'
 
-const NavBar = () => {
+const NavBar = ({ setNextPage }) => {
     return (
         <nav 
         className='flex w-screen h-10 bg-white justify-between px-2 items-center min-w-min'
         >
-            <NavLink to={'/'}>
+            <NavLink to={'/'} onClick={() => setNextPage(1)}>
                 <FilmIcon className='w-10 h-10'/>
             </NavLink>
             <input 
