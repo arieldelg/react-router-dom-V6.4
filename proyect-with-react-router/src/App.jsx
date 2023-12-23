@@ -1,22 +1,15 @@
-import { HomePage } from './HomePage'
+import { LayoutPage } from './LayoutPage.jsx'
 import { AboutPage } from './AboutPage.jsx'
 import { ProfilePage } from './ProfilePage.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { HomeData } from './HomeData.jsx'
+import { HomePage } from './HomePage.jsx'
 import { RatingPage } from './RatingPage.jsx'
 import { MovieDetail } from './MovieDetail.jsx'
 import { CategoryMoviePage } from './CategoryMoviePage.jsx'
+import { fetchMovieDataBase } from './api.js'
+import { SearchPage } from './SearchPage.jsx'
 import './App.css'
 import { useEffect, useState } from 'react'
-
-const API_URL = 'https://api.themoviedb.org/3/'
-const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhOGE1MjM1ODM0YzNjN2Q0NmFmYjE4YzViOTYzM2NjNCIsInN1YiI6IjY1MDM4NWJlNmEyMjI3MDExYTdjMmE1ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.rLchL40z0mZ5vv7UdQcYoqO8gNC1L7OEnfBTldabc4M'
-  }
-}
 
 const App = () => {
   const [dayTrendingMovie, setDayTrendingMovie] = useState([])
@@ -24,37 +17,31 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [nextPage, setNextPage] = useState(1)
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     setIsLoading(true)
     const fetchTrending = async () => {
+      const response =  await fetchMovieDataBase.get(`trending/movie/day?page=${nextPage}`)
       try {
-        const response = await fetch(`${API_URL}trending/movie/day?page=${nextPage}`, options)
-        if (!response.ok) throw new Error('Did not received expected data')
-        const data = await response.json()
-        setDayTrendingMovie(data.results)
-        setError(null)
+        setDayTrendingMovie(response.data.results)
       } catch (error) {
-        setError(error.message)
+        setError(response.message)
       } finally {
         setIsLoading(false)
       }
     }
-  
     fetchTrending()
   }, [nextPage])
 
   useEffect(() => {
     const fetchCategoryMovie = async () => {
-      try {
-        const response = await fetch(`${API_URL}genre/movie/list`, options)
-        if (!response.ok) throw new Error('Did not received expected data')
-        const genreData = await response.json()
-        setGenreList(genreData.genres)
-        setError(null)
-      } catch (error) {
-        setError(error.message)
-      }
+      const response = await fetchMovieDataBase.get('genre/movie/list')
+        try {
+          setGenreList(response.data.genres)
+        } catch (error) {
+          setError(response.message)
+        }
     }
     fetchCategoryMovie()
   }, [])
@@ -62,13 +49,14 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<HomePage error={error} setNextPage={setNextPage} isLoading={isLoading}/>}>
-          <Route path='/' element={<HomeData dayTrendingMovie={dayTrendingMovie} genreList={genreList}/>}/>
+        <Route element={<LayoutPage error={error} setNextPage={setNextPage} isLoading={isLoading} search={search} setSearch={setSearch}/>}>
+          <Route path='/' element={<HomePage dayTrendingMovie={dayTrendingMovie} genreList={genreList}/>}/>
           <Route path='about' element={<AboutPage/>}/>
           <Route path='profile' element={<ProfilePage/>}/>
-          <Route path='tendencias' element={<RatingPage dayTrendingMovie={dayTrendingMovie} setNextPage={setNextPage}/>}/>
-          <Route path='/movie/:id' element={<MovieDetail/>}/>
-          <Route path='/:name/:id' element={<CategoryMoviePage/>}/>
+          <Route path='tendencias/' element={<RatingPage data={dayTrendingMovie} setNextPage={setNextPage}/>}/>
+          <Route path='/:name/:id' element={<CategoryMoviePage nextPage={nextPage} setNextPage={setNextPage}/>}/>
+          <Route path='movie/:id' element={<MovieDetail/>}/>
+          <Route path='search/:name' element={<SearchPage/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

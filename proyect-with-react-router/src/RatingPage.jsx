@@ -1,17 +1,10 @@
-import { MovieCard } from "./MovieCard"
+import { LayoutMoviePage } from "./LayoutMoviePage"
 
-const RatingPage = ({ dayTrendingMovie, setNextPage }) => {
+const RatingPage = ({ data, setNextPage }) => {
     return (
-        <div >
-            <div className="flex">
-                {
-                    dayTrendingMovie.map(element => {
-                        return <MovieCard data={element} key={element.id}/>
-                    })
-                }
-            </div>
-            <button type="button" onClick={() => setNextPage(prev => prev + 1)}>Siguiente pagina</button>
-        </div>
+        <>
+         <LayoutMoviePage data={data} setNextPage={setNextPage} title={'Tendencias'}/>
+        </>
     )
 }
 
