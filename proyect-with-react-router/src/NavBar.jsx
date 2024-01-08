@@ -1,10 +1,13 @@
 import { FilmIcon } from '@heroicons/react/24/solid'
+
 import { NavLink, useNavigate } from 'react-router-dom'
 
-const NavBar = ({ setNextPage, search, setSearch }) => {
+const NavBar = ({ setNextPage, search, setSearch, requestToken }) => {
+    // const inputRef = useRef()
     const navigate = useNavigate()
     const toSearch = (event) => {
         event.preventDefault()
+        // inputRef.current.focus()
         navigate(`search/${search}`)
         setSearch('')
     }
@@ -23,11 +26,13 @@ const NavBar = ({ setNextPage, search, setSearch }) => {
                 className='border border-black w-full min-w-max px-2 rounded-md h-8'
                 onChange={(event) => setSearch(event.target.value)}
                 value={search}
+                // ref={inputRef}
                 />
             </form>
             <div className='w-40 flex justify-evenly'>
               <NavLink to={'about'}>About</NavLink>
               <NavLink to={'profile'}>Profile</NavLink>
+              <NavLink to={'login'}>Login</NavLink>
             </div>
         </nav>
     )

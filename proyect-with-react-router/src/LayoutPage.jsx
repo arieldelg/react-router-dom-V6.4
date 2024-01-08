@@ -1,24 +1,14 @@
 import { Outlet } from 'react-router-dom'
 import { NavBar } from './NavBar'
+import { HomePageLS } from './HomePageLS'
 
-
-const LayoutPage = ({ error, setNextPage, isLoading, search, setSearch }) => {
-    
+const LayoutPage = ({ error, setNextPage, isLoading, search, setSearch, requestToken }) => {
     return (
         <>
-        <NavBar setNextPage={setNextPage} search={search} setSearch={setSearch}/>
-        {
-            error && <p>{error}</p>
-        }
-        {
-            isLoading && <p>Estamos cargando...</p>
-        }
-        {
-            !error && !isLoading &&
-                <main className='w-screen flex justify-center flex-col max-w-6xl m-auto items-center'>
-                    <Outlet/>
-                </main>
-        }
+        <NavBar setNextPage={setNextPage} search={search} setSearch={setSearch} requestToken={requestToken}/>   
+        <main className='w-screen flex justify-center flex-col max-w-6xl m-auto items-center altura'>
+            <Outlet/>
+        </main>
         </>
       )
 }

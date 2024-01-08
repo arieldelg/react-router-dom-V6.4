@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom"
 
-const CategoryCard = ({ data }) => {
+const CategoryCard = ({ data, setIsLoading }) => {
     const navigate = useNavigate()
     const bgColor = {
         28: 'bg-slate-800',
-        12: 'bg-slate-500',
+        12: 'bg-slate-700',
         16: 'bg-yellow-800',
         35: 'bg-blue-800',
         80: 'bg-red-800',
@@ -24,7 +24,9 @@ const CategoryCard = ({ data }) => {
         10749: 'bg-purple-200',
     }
     return (
-        <li onClick={() => navigate(`/${data.name}/${data.id}`)} className='cursor-pointer list-none no-underline flex items-center gap-2 py-2'>
+        <li onClick={() => navigate(`/${data.name}/${data.id}`)} 
+            className='cursor-pointer list-none no-underline flex items-center gap-2 py-2'
+            >
             <p className={`pr-4 no-underline ${bgColor[data.id]} w-6 h-6 rounded-lg`}></p>
             <p className="text-xl font-semibold">{data.name}</p>
         </li>
